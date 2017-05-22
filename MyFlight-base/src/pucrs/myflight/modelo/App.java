@@ -15,15 +15,16 @@ public class App {
 		GerenciadorAeronaves gerAvioes = new GerenciadorAeronaves();
 		GerenciadorRotas gerRotas = new GerenciadorRotas();		
 					
-		/*
+		
 		try {
-			//gerCias.carregaDados();
-			//gerCias.gravaSerial();
-			gerCias.carregaSerial();
+			gerCias.carregaDados();
+			gerCias.gravaSerial();
+			//gerCias.carregaSerial();
 		} catch (IOException e) {
 			System.out.println("Erro carregando dados de cias.");
 			System.exit(1);
-		}*/
+		}
+		
 		
 		/*		
 		CiaAerea gol = gerCias.buscarCodigo("G3");
@@ -174,5 +175,13 @@ public class App {
 			}
 		}
 		*/
+		
+		/*
+		 * asd
+		 * s
+		 * s
+		 * s
+		 * 
+		 */
 	}
 }
