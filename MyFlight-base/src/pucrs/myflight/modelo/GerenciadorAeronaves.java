@@ -1,14 +1,8 @@
 package pucrs.myflight.modelo;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Scanner;
 
 public class GerenciadorAeronaves {
 
@@ -53,21 +47,4 @@ public class GerenciadorAeronaves {
 			aux.append(av.toString()+"\n");
 		return aux.toString();
 	}
-	
-	/*
-	 * public void carregaDados() throws IOException {
-		Path path1 = Paths.get("airlines.dat");
-		try (Scanner sc = new Scanner(Files.newBufferedReader(path1, Charset.forName("utf8")))) {
-			sc.useDelimiter("[;\n]"); // separadores: ; e nova linha
-			String header = sc.nextLine(); // pula cabeçalho
-			String id, nome;
-			while (sc.hasNext()) {
-				id = sc.next();
-				nome = sc.next();
-				System.out.format("%s - %s%n", id, nome);
-				empresas.add(new CiaAerea(id, nome));
-			}
-		}
-	}
-	 */
 }
