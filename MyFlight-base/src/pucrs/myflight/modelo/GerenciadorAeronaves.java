@@ -1,8 +1,14 @@
 package pucrs.myflight.modelo;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Scanner;
 
 public class GerenciadorAeronaves {
 
@@ -24,7 +30,7 @@ public class GerenciadorAeronaves {
 	}
 
 	public void adicionar(Aeronave av) {
-		aeronaves.add(av);
+		aeronaves.add(av);		
 	}
 	
 	public ArrayList<Aeronave> listarTodas() {
@@ -38,6 +44,27 @@ public class GerenciadorAeronaves {
 			if(av.getCodigo().equals(codigo))
 				return av;
 		return null;
+	}
+	
+	public void carregaDados() throws IOException {
+		Path path1 = Paths.get("equipment.dat");
+		try (Scanner sc = new Scanner(Files.newBufferedReader(path1, Charset.forName("utf8")))) {
+			sc.useDelimiter("[;\n]"); // separadores: ; e nova linha
+			String header = sc.nextLine(); // pula cabeçalho
+			String id, descricao;
+			int capacidade = 0;
+			while (sc.hasNext()) {
+				id = sc.next();
+				descricao = sc.next();
+				try{
+					capacidade = Integer.parseInt(sc.next());
+										
+				}catch (NumberFormatException e) {
+				    e.printStackTrace();
+				}			
+				aeronaves.add(new Aeronave(id, descricao, capacidade));
+			}
+		}
 	}
 	
 	@Override

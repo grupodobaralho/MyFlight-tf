@@ -14,16 +14,26 @@ public class App {
 		GerenciadorAeroportos gerAero = new GerenciadorAeroportos();
 		GerenciadorAeronaves gerAvioes = new GerenciadorAeronaves();
 		GerenciadorRotas gerRotas = new GerenciadorRotas();		
+		GerenciadorPaises gerPaises = new GerenciadorPaises();
 					
-		/*
+		
 		try {
-			//gerCias.carregaDados();
+			gerCias.carregaDados();
+			gerPaises.carregaDados();
+			gerAvioes.carregaDados();
+			gerAero.carregaDados(gerPaises);
+			gerRotas.carregaDados(gerCias, gerAero, gerAvioes);			
 			//gerCias.gravaSerial();
-			gerCias.carregaSerial();
+			//gerCias.carregaSerial();
 		} catch (IOException e) {
 			System.out.println("Erro carregando dados de cias.");
 			System.exit(1);
-		}*/
+		}
+		
+		ArrayList<Rota> arrayTest = new ArrayList<>(gerRotas.listarTodas());
+		for(Rota r : arrayTest) {
+			System.out.println("Cia: "+ r.getCia() + " Origem: " + r.getOrigem() + " Destino: " + r.getDestino() + " Aeronave: " + r.getAeronave() + "\n");
+		}
 		
 		/*		
 		CiaAerea gol = gerCias.buscarCodigo("G3");
