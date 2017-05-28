@@ -68,7 +68,7 @@ public class GerenciadorRotas {
 			String airline, from, to, codeshare, stops, equipment;
 			while (sc.hasNext()) {
 				// airline;from;to;codeshare;stops;equipment
-				airline = sc.next();
+				airline = sc.next();				
 				from = sc.next();
 				to = sc.next();
 				// precisa?
@@ -76,7 +76,14 @@ public class GerenciadorRotas {
 				// precisa?
 				stops = sc.next();
 				equipment = sc.next();
-				rotas.add(new Rota(cias.buscarNome(airline), aero.buscarCodigo(from), aero.buscarCodigo(to),
+
+				// Mutreta???
+				// System.out.println("EQUIP 1: " + equipment);
+				Scanner scan2 = new Scanner(equipment);
+				equipment = scan2.next();
+				// System.out.println("EQUIP 2: " + equipment);
+
+				rotas.add(new Rota(cias.buscarCodigo(airline), aero.buscarCodigo(from), aero.buscarCodigo(to),
 						aeron.buscarCodigo(equipment)));
 			}
 		}

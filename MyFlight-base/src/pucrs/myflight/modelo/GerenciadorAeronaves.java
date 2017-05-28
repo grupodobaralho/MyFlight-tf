@@ -67,6 +67,7 @@ public class GerenciadorAeronaves {
 		}
 	}
 	
+	
 	@Override
 	public String toString() {
 		StringBuilder aux = new StringBuilder();

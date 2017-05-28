@@ -53,7 +53,8 @@ public class GerenciadorCias implements Iterable<CiaAerea> {
 			while (sc.hasNext()) {
 				id = sc.next();
 				nome = sc.next();
-				System.out.format("%s - %s%n", id, nome);
+				System.out.println("ID: "+ id + "- Nome: "+ nome + "-");
+				//System.out.format("%s - %s%n", id, nome);
 				empresas.add(new CiaAerea(id, nome));
 			}
 		}
