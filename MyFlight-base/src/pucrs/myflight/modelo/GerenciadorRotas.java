@@ -84,7 +84,7 @@ public class GerenciadorRotas {
 				// System.out.println("EQUIP 2: " + equipment);
 
 				rotas.add(new Rota(cias.buscarCodigo(airline), aero.buscarCodigo(from), aero.buscarCodigo(to),
-						aeron.buscarCodigo(equipment)));
+						aeron.getHash().get(equipment)));
 			}
 		}
 	}
