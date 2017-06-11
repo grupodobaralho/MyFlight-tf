@@ -6,14 +6,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class GerenciadorPaises {
 
-	private ArrayList<Pais> paises;
+	private HashMap<String, Pais> paises;
 
 	public GerenciadorPaises() {
-		paises = new ArrayList<>();
+		paises = new HashMap<>();
 	}
 
 	public void carregaDados() throws IOException {
@@ -25,18 +26,24 @@ public class GerenciadorPaises {
 			while (sc.hasNext()) {
 				codigo = sc.next();
 				nome = sc.next();
-				System.out.format("%s - %s%n", codigo, nome);
-				paises.add(new Pais(codigo, nome));
+				Pais pais = new Pais(codigo, nome);
+				paises.put(pais.getCodigo(), pais);
 			}
 		}
 	}
 	
-	public Pais buscarCodigo(String codigo) {
-		for(Pais p: paises)
-			if(p.getCodigo().equals(codigo))
-				return p;
-		return null;
+	public HashMap<String, Pais> getHash(){
+		return paises;
 	}
 	
+	@Override
+	public String toString(){
+		StringBuilder str = new StringBuilder();
+		for (HashMap.Entry<String, Pais> entry : paises.entrySet())
+		{
+		    str.append(entry.getValue()+"\n");
+		}
+		return str.toString();
+	}	
 
 }

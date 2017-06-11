@@ -7,36 +7,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
 public class GerenciadorAeroportos {
 
-	private ArrayList<Aeroporto> aeroportos;
+	private HashMap<String, Aeroporto> aeroportos;	
 
 	public GerenciadorAeroportos() {
-		aeroportos = new ArrayList<>();
-	}
-
-	public void adicionar(Aeroporto a) {
-		aeroportos.add(a);
-	}
-
-	public ArrayList<Aeroporto> listarTodos() {
-		return new ArrayList<Aeroporto>(aeroportos);
-	}
-
-	public void ordenaNome() {
-		Collections.sort(aeroportos);
-	}
-
-	public Aeroporto buscarCodigo(String codigo) {
-		for (Aeroporto a : aeroportos)
-			if (a.getCodigo().equals(codigo))
-				return a;
-		return null;
-	}
+		aeroportos = new HashMap<>();
+	}	
 
 	public void carregaDados(GerenciadorPaises paises) throws IOException {
 		Path path1 = Paths.get("airports.dat");
@@ -65,18 +47,24 @@ public class GerenciadorAeroportos {
 				}
 				name = sc.next();
 				cCode = sc.next();
-
-				aeroportos.add(new Aeroporto(code, name, new Geo(latitude, longitude)));
+				Aeroporto aero = new Aeroporto(code, name, new Geo(latitude, longitude));
+				aeroportos.put(aero.getCodigo(), aero);
 
 			}
 		}
 	}
+	
+	public HashMap<String, Aeroporto> getHash(){
+		return aeroportos;
+	}
 
 	@Override
 	public String toString() {
-		StringBuilder aux = new StringBuilder();
-		for (Aeroporto a : aeroportos)
-			aux.append(a + "\n");
-		return aux.toString();
+		StringBuilder str = new StringBuilder();
+		for (HashMap.Entry<String, Aeroporto> entry : aeroportos.entrySet())
+		{
+		    str.append(entry.getValue()+"\n");
+		}
+		return str.toString();
 	}
 }

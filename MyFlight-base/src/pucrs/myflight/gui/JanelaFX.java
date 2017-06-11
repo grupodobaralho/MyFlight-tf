@@ -58,7 +58,7 @@ public class JanelaFX extends Application {
 		leftPane.setHgap(10);
 		leftPane.setVgap(10);
 		leftPane.setPadding(new Insets(10,10,10,10));
-		Button btnConsulta = new Button("AAAA");
+		Button btnConsulta = new Button("TESTEEEEEEEEEEEEEEE");
 		leftPane.add(btnConsulta, 0,0);
 		leftPane.add(new Button("BBBB"), 0,1);
 		leftPane.add(new Button("CCCC"), 0,2);
@@ -95,7 +95,7 @@ public class JanelaFX extends Application {
 		//
 		// Chame aqui a leitura dos demais arquivos
 		//
-		
+		/*
 		Aeroporto poa = new Aeroporto("POA", "Salgado Filho Intl Apt",
 				new Geo(-29.9939, -51.1711));
 		Aeroporto gru = new Aeroporto("GRU", "São Paulo Guarulhos Intl Apt",
@@ -105,6 +105,7 @@ public class JanelaFX extends Application {
 		gerAero.adicionar(poa);
 		gerAero.adicionar(gru);
 		gerAero.adicionar(mia);
+		*/
 	}
     
 	private void consulta() {

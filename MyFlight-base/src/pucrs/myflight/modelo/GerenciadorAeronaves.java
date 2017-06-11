@@ -47,16 +47,12 @@ public class GerenciadorAeronaves {
 	
 	@Override
 	public String toString(){
-		return aeronaves.values().toString();
+		StringBuilder str = new StringBuilder();
+		for (HashMap.Entry<String, Aeronave> entry : aeronaves.entrySet())
+		{
+		    str.append(entry.getValue()+"\n");
+		}
+		return str.toString();
 	}
 	
-	/*
-	@Override
-	public String toString() {
-		StringBuilder aux = new StringBuilder();
-		for(Aeronave av: aeronaves)
-			aux.append(av.toString()+"\n");
-		return aux.toString();
-	}
-	*/
 }

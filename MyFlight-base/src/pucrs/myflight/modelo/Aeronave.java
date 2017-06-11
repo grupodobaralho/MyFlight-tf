@@ -1,6 +1,6 @@
 package pucrs.myflight.modelo;
 
-public class Aeronave implements Imprimivel, Contavel, Comparable<Aeronave> {
+public class Aeronave {
 	private String codigo;
 	private String descricao;
 	private int capacidade;
@@ -25,26 +25,11 @@ public class Aeronave implements Imprimivel, Contavel, Comparable<Aeronave> {
 
 	public int getCapacidade() {
 		return capacidade;
-	}
-
-	@Override
-	public void imprimir() {
-		System.out.println(toString());
-	}
+	}	
 
 	@Override
 	public String toString() {
 		return codigo + " - " + descricao + " (" + capacidade + ")";
 	}
 
-	@Override
-	public int total() {
-		// TODO Auto-generated method stub
-		return totalAeronaves;
-	}
-
-	@Override
-	public int compareTo(Aeronave o) {
-		return descricao.compareTo(o.descricao);
-	}
 }
