@@ -46,8 +46,8 @@ public class GerenciadorAeroportos {
 					e.printStackTrace();
 				}
 				name = sc.next();
-				cCode = sc.next();
-				Aeroporto aero = new Aeroporto(code, name, new Geo(latitude, longitude));
+				cCode = sc.next();				
+				Aeroporto aero = new Aeroporto(code, name, new Geo(latitude, longitude), paises.getHash().get(cCode));
 				aeroportos.put(aero.getCodigo(), aero);
 
 			}
