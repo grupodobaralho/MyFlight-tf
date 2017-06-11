@@ -23,8 +23,10 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import pucrs.myflight.modelo.Aeroporto;
 import pucrs.myflight.modelo.Geo;
+import pucrs.myflight.modelo.GerenciadorAeronaves;
 import pucrs.myflight.modelo.GerenciadorAeroportos;
 import pucrs.myflight.modelo.GerenciadorCias;
+import pucrs.myflight.modelo.GerenciadorPaises;
 import pucrs.myflight.modelo.GerenciadorRotas;
 
 public class JanelaFX extends Application {
@@ -32,8 +34,11 @@ public class JanelaFX extends Application {
 	final SwingNode mapkit = new SwingNode();
 
 	private GerenciadorCias gerCias;
+	private GerenciadorPaises gerPaises;	
+	private GerenciadorAeronaves gerAvioes;
 	private GerenciadorAeroportos gerAero;
-	private GerenciadorRotas gerRotas;
+	private GerenciadorRotas gerRotas;	
+
 
 	private GerenciadorMapa gerenciador;
 
@@ -58,7 +63,7 @@ public class JanelaFX extends Application {
 		leftPane.setHgap(10);
 		leftPane.setVgap(10);
 		leftPane.setPadding(new Insets(10,10,10,10));
-		Button btnConsulta = new Button("AAAA");
+		Button btnConsulta = new Button("TESTEEEEEEEEEEEEEEE");
 		leftPane.add(btnConsulta, 0,0);
 		leftPane.add(new Button("BBBB"), 0,1);
 		leftPane.add(new Button("CCCC"), 0,2);
@@ -81,13 +86,15 @@ public class JanelaFX extends Application {
     private void setup() {
 
     	gerCias = new GerenciadorCias();
+    	gerPaises = new GerenciadorPaises();
+    	gerAvioes = new GerenciadorAeronaves();    
     	gerAero = new GerenciadorAeroportos();
     	gerRotas = new GerenciadorRotas();
     	
 		try {
 			gerCias.carregaDados();
 		} catch (IOException e) {
-			System.out.println("Impossível ler airlines.dat!");
+			System.out.println("Impossivel ler airlines.dat!");
 			System.out.println("Msg: "+e);
 			System.exit(1);
 		}
@@ -96,15 +103,37 @@ public class JanelaFX extends Application {
 		// Chame aqui a leitura dos demais arquivos
 		//
 		
-		Aeroporto poa = new Aeroporto("POA", "Salgado Filho Intl Apt",
-				new Geo(-29.9939, -51.1711));
-		Aeroporto gru = new Aeroporto("GRU", "São Paulo Guarulhos Intl Apt",
-				new Geo(-23.4356, -46.4731));
-		Aeroporto mia = new Aeroporto("MIA", "Miami International Apt",
-				new Geo(25.7933,-80.2906));
-		gerAero.adicionar(poa);
-		gerAero.adicionar(gru);
-		gerAero.adicionar(mia);
+		try {
+			gerPaises.carregaDados();
+		} catch (IOException e) {
+			System.out.println("Impossivel ler countries.dat!");
+			System.out.println("Msg: "+e);
+			System.exit(1);
+		}
+		
+		try {
+			gerAvioes.carregaDados();
+		} catch (IOException e) {
+			System.out.println("Impossivel ler equipment.dat!");
+			System.out.println("Msg: "+e);
+			System.exit(1);
+		}
+		
+		try {
+			gerAero.carregaDados(gerPaises);
+		} catch (IOException e) {
+			System.out.println("Impossivel ler airports.dat!");
+			System.out.println("Msg: "+e);
+			System.exit(1);
+		}		
+		
+		try {
+			gerRotas.carregaDados(gerCias, gerAero, gerAvioes);
+		} catch (IOException e) {
+			System.out.println("Impossivel ler routes.dat!");
+			System.out.println("Msg: "+e);
+			System.exit(1);
+		}	
 	}
     
 	private void consulta() {
@@ -116,8 +145,8 @@ public class JanelaFX extends Application {
         
         // Exemplo de uso:
         
-        Aeroporto poa = gerAero.buscarCodigo("POA");
-        Aeroporto gru = gerAero.buscarCodigo("GRU"); 
+        Aeroporto poa = gerAero.getHash().get("POA");
+        Aeroporto gru = gerAero.getHash().get("GRU"); 
         
         Geo locPoa = poa.getLocal();
         Geo locGru = gru.getLocal();

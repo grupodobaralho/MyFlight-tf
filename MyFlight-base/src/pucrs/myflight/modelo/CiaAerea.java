@@ -28,4 +28,10 @@ public class CiaAerea implements Serializable {
 	public String getNome() {
 		return nome;
 	}	
+	
+	@Override
+	public String toString() {
+		return codigo + " - " + nome;
+	}
+	
 }
