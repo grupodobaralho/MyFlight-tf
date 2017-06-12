@@ -66,7 +66,7 @@ public class GerenciadorAeroportos {
 	public HashMap<String, Aeroporto> getHash() {
 		return aeroportos;
 	}
-	
+
 	public ArrayList<Aeroporto> listarAeroportos() {
 		ArrayList<Aeroporto> retorno = new ArrayList<>();
 
@@ -76,6 +76,7 @@ public class GerenciadorAeroportos {
 
 		return retorno;
 	}
+
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
