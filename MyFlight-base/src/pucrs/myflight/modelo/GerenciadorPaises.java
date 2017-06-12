@@ -31,19 +31,27 @@ public class GerenciadorPaises {
 			}
 		}
 	}
-	
-	public HashMap<String, Pais> getHash(){
+
+	public HashMap<String, Pais> getHash() {
 		return paises;
 	}
-	
+
+	public Pais getAeroporto(String codigo) {
+
+		return paises.get(codigo);
+	}
+
+	public void addAeroporto(Pais pais) {
+		paises.put(pais.getCodigo(), pais);
+	}
+
 	@Override
-	public String toString(){
+	public String toString() {
 		StringBuilder str = new StringBuilder();
-		for (HashMap.Entry<String, Pais> entry : paises.entrySet())
-		{
-		    str.append(entry.getValue()+"\n");
+		for (HashMap.Entry<String, Pais> entry : paises.entrySet()) {
+			str.append(entry.getValue() + "\n");
 		}
 		return str.toString();
-	}	
+	}
 
 }
