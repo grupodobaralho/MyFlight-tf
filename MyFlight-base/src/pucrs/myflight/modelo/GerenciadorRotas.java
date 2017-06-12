@@ -68,7 +68,7 @@ public class GerenciadorRotas {
 			String airline, from, to, codeshare, stops, equipment;
 			while (sc.hasNext()) {
 				// airline;from;to;codeshare;stops;equipment
-				airline = sc.next();				
+				airline = sc.next();
 				from = sc.next();
 				to = sc.next();
 				codeshare = sc.next();
