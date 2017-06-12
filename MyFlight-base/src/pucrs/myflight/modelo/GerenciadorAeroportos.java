@@ -66,7 +66,16 @@ public class GerenciadorAeroportos {
 	public HashMap<String, Aeroporto> getHash() {
 		return aeroportos;
 	}
+	
+	public ArrayList<Aeroporto> listarAeroportos() {
+		ArrayList<Aeroporto> retorno = new ArrayList<>();
 
+		for (HashMap.Entry<String, Aeroporto> entry : aeroportos.entrySet()) {
+			retorno.add(entry.getValue());
+		}
+
+		return retorno;
+	}
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
