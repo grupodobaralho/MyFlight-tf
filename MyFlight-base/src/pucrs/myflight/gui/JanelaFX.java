@@ -5,7 +5,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
@@ -18,16 +20,20 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import pucrs.myflight.modelo.Aeroporto;
+import pucrs.myflight.modelo.CiaAerea;
 import pucrs.myflight.modelo.Geo;
 import pucrs.myflight.modelo.GerenciadorAeronaves;
 import pucrs.myflight.modelo.GerenciadorAeroportos;
 import pucrs.myflight.modelo.GerenciadorCias;
 import pucrs.myflight.modelo.GerenciadorPaises;
 import pucrs.myflight.modelo.GerenciadorRotas;
+import pucrs.myflight.modelo.Rota;
 
 public class JanelaFX extends Application {
 
@@ -59,18 +65,44 @@ public class JanelaFX extends Application {
 
 		BorderPane pane = new BorderPane();			
 		GridPane leftPane = new GridPane();
+		
 		leftPane.setAlignment(Pos.CENTER);
 		leftPane.setHgap(10);
 		leftPane.setVgap(10);
 		leftPane.setPadding(new Insets(10,10,10,10));
-		Button btnConsulta = new Button("TESTEEEEEEEEEEEEEEE");
-		leftPane.add(btnConsulta, 0,0);
+		
+		
+		
+		Button btnConsulta = new Button("TESTEEEEEEEEEEEEEEE");			
+		leftPane.add(btnConsulta, 0,0);	
+		/*
 		leftPane.add(new Button("BBBB"), 0,1);
 		leftPane.add(new Button("CCCC"), 0,2);
 		leftPane.add(new Button("DDDD"), 0,3);
+		*/	
 		btnConsulta.setOnAction(e -> {
 			consulta();
 		});
+		
+		
+		//Botoes da Consulta 1
+		Label consultaUmLB = new Label("Cons.1 : Lista Companhias");	
+		
+		ComboBox consultaUmCB = new ComboBox();
+		consultaUmCB.getItems().addAll(gerCias.getLista());
+		
+		Button consultaUmBT = new Button("Exibir");
+		consultaUmBT.setOnAction(e -> {
+			gerenciador.clear();	
+			consultaUm(consultaUmCB);	
+			gerenciador.getMapKit().repaint();
+		});
+		
+		leftPane.add(consultaUmLB, 0,1);
+		leftPane.add(consultaUmCB, 0, 2);
+		leftPane.add(consultaUmBT, 0, 3);
+		
+		
 		
 		pane.setCenter(mapkit);
 		pane.setLeft(leftPane);
@@ -171,6 +203,40 @@ public class JanelaFX extends Application {
         // E adicionando o traçado...
         gerenciador.addTracado(tr);        
         gerenciador.getMapKit().repaint();        
+	}
+	
+	private void exibeTodos(){
+		gerenciador.clear();
+		Set<MyWaypoint> pontos = new HashSet<>();
+		List<Aeroporto> aeroportos = gerAeroportos.getAeroporto();
+		for(Aeroporto a : aeroportos)
+			pontos.add(new MyWaypoint(Color.RED,a.getNome(), a.getLocal()));
+		gerenciador.setPontos(pontos);	
+	}
+	
+	private void consultaUm(ComboBox consultaUmCB){
+		//Lista de Aeroportos referentes (Pontinhos)
+		Set<MyWaypoint> aeroportos = new HashSet<MyWaypoint>(); 
+		
+		//Pega a Cia Selecionada no ComboBox
+		CiaAerea ciaSelecionada= (CiaAerea)consultaUmCB.getValue();
+		
+		List<Rota> rotas = gerRotas.listarTodas();	
+		Set<Rota> setRotas = new HashSet<>();
+		rotas.stream()
+			.filter(e->e.getCia().equals(ciaSelecionada))
+			.forEach(e -> setRotas.add(e));			
+		
+		Set<Aeroporto> setAeros = new HashSet<>();
+		
+		setRotas.forEach(e -> {
+			setAeros.add(e.getOrigem());
+			setAeros.add(e.getDestino());
+		});
+		
+		setAeros.forEach(e -> {
+			aeroportos.add(new MyWaypoint(Color.BLUE, e.getNome(), e.getLocal(), 5));
+		});				
 	}
 
 	private class EventosMouse extends MouseAdapter {
