@@ -28,26 +28,46 @@ public class GerenciadorCias {
 			while (sc.hasNext()) {
 				id = sc.next();
 				nome = sc.next();
-				//System.out.println("ID: "+ id + "- Nome: "+ nome + "-");
-				//System.out.format("%s - %s%n", id, nome);
+				// System.out.println("ID: "+ id + "- Nome: "+ nome + "-");
+				// System.out.format("%s - %s%n", id, nome);
 				CiaAerea cia = new CiaAerea(id, nome);
-				empresas.put(cia.getCodigo(),cia);
+				empresas.put(cia.getCodigo(), cia);
 			}
 		}
 	}
-	
-	public HashMap<String, CiaAerea> getHash(){
+
+	public HashMap<String, CiaAerea> getHash() {
 		return empresas;
 	}
-	
+
+	public CiaAerea getCiaAerea(String codigo) {
+
+		return empresas.get(codigo);
+	}
+
+	public void addCiaAerea(CiaAerea cia) {
+
+		empresas.put(cia.getCodigo(), cia);
+
+	}
+
+	public ArrayList<CiaAerea> listarCiasAereas() {
+		ArrayList<CiaAerea> retorno = new ArrayList<>();
+
+		for (HashMap.Entry<String, CiaAerea> entry : empresas.entrySet()) {
+			retorno.add(entry.getValue());
+		}
+
+		return retorno;
+	}
+
 	@Override
-	public String toString(){
+	public String toString() {
 		StringBuilder str = new StringBuilder();
-		for (HashMap.Entry<String, CiaAerea> entry : empresas.entrySet())
-		{
-		    str.append(entry.getValue()+"\n");
+		for (HashMap.Entry<String, CiaAerea> entry : empresas.entrySet()) {
+			str.append(entry.getValue() + "\n");
 		}
 		return str.toString();
 	}
-	
+
 }

@@ -17,8 +17,8 @@ public class GerenciadorAeronaves {
 
 	public GerenciadorAeronaves() {
 		aeronaves = new HashMap<>();
-	}	
-	
+	}
+
 	public void carregaDados() throws IOException {
 		Path path1 = Paths.get("equipment.dat");
 		try (Scanner sc = new Scanner(Files.newBufferedReader(path1, Charset.forName("utf8")))) {
@@ -29,30 +29,38 @@ public class GerenciadorAeronaves {
 			while (sc.hasNext()) {
 				id = sc.next();
 				descricao = sc.next();
-				try{
+				try {
 					capacidade = Integer.parseInt(sc.next());
-										
-				}catch (NumberFormatException e) {
-				    e.printStackTrace();
-				}	
+
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				}
 				Aeronave aero = new Aeronave(id, descricao, capacidade);
-				aeronaves.put(aero.getCodigo(),aero);
+				aeronaves.put(aero.getCodigo(), aero);
 			}
 		}
-	}	
-	
-	public HashMap<String, Aeronave> getHash(){
+	}
+
+	public HashMap<String, Aeronave> getHash() {
 		return aeronaves;
 	}
-	
+
+	public Aeronave getAeronave(String codigo) {
+
+		return aeronaves.get(codigo);
+	}
+
+	public void addAeronave(Aeronave aero) {
+		aeronaves.put(aero.getCodigo(), aero);
+	}
+
 	@Override
-	public String toString(){
+	public String toString() {
 		StringBuilder str = new StringBuilder();
-		for (HashMap.Entry<String, Aeronave> entry : aeronaves.entrySet())
-		{
-		    str.append(entry.getValue()+"\n");
+		for (HashMap.Entry<String, Aeronave> entry : aeronaves.entrySet()) {
+			str.append(entry.getValue() + "\n");
 		}
 		return str.toString();
 	}
-	
+
 }
