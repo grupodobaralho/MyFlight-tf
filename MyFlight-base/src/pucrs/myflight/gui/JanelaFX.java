@@ -89,7 +89,7 @@ public class JanelaFX extends Application {
 		Label consultaUmLB = new Label("Cons.1 : Lista Companhias");	
 		
 		ComboBox consultaUmCB = new ComboBox();
-		consultaUmCB.getItems().addAll(gerCias.getLista());
+		//consultaUmCB.getItems().addAll(gerCias.getLista());
 		
 		Button consultaUmBT = new Button("Exibir");
 		consultaUmBT.setOnAction(e -> {
@@ -203,15 +203,6 @@ public class JanelaFX extends Application {
         // E adicionando o traçado...
         gerenciador.addTracado(tr);        
         gerenciador.getMapKit().repaint();        
-	}
-	
-	private void exibeTodos(){
-		gerenciador.clear();
-		Set<MyWaypoint> pontos = new HashSet<>();
-		List<Aeroporto> aeroportos = gerAeroportos.getAeroporto();
-		for(Aeroporto a : aeroportos)
-			pontos.add(new MyWaypoint(Color.RED,a.getNome(), a.getLocal()));
-		gerenciador.setPontos(pontos);	
 	}
 	
 	private void consultaUm(ComboBox consultaUmCB){
