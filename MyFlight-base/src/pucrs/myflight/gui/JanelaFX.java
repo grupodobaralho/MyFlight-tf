@@ -225,6 +225,18 @@ public class JanelaFX extends Application {
 		gerenciador.setPontos(pontos);
 	}
 
+	private void consulta2(ComboBox consultaDoisCb) {
+		gerenciador.clear();
+		List<MyWaypoint> pontos = new ArrayList<>();
+		List<Aeroporto> aeroportos = gerAero.listarAeroportos();
+		int cont = 0;
+		for (Aeroporto a : aeroportos) {
+			cont = 0;
+			pontos.add(new MyWaypoint(Color.RED, a.getNome(), a.getLocal(), 4));
+		}
+		gerenciador.setPontos(pontos);
+	}
+
 	/**
 	 * Desenha todos os aeroportos onde uma determinada companhia aérea opera.
 	 * Mostra também as rotas envolvidas
