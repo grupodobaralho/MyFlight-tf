@@ -22,8 +22,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import pucrs.myflight.modelo.Aeroporto;
 import pucrs.myflight.modelo.CiaAerea;
@@ -96,14 +100,56 @@ public class JanelaFX extends Application {
 		leftPane.add(consultaUmBT, 0, 3);
 		// ==========================================================
 
+		leftPane.add(new Separator(), 0, 4);
+		
+		// Botoes da Consulta 3======================================
+		Label consultaTresLB = new Label("Cons.3 : Mostra todas rotas entre 2 aeroportos");
+		
+		Label origemLB = new Label("Origem"); 
+		TextField origemTF = new TextField();
+		origemTF.setPromptText("Código da origem");
+		HBox origemHB = new HBox(origemLB, origemTF);
+		origemHB.setSpacing(10);
+		
+		Label destinoLB = new Label("Destino");
+		TextField destinoTF = new TextField();
+		destinoTF.setPromptText("Código do destino");	
+		HBox destinoHB = new HBox(destinoLB, destinoTF);
+		destinoHB.setSpacing(10);
+				
+		
+		Button buscarRotas = new Button("Buscar");
+		
+		Label invalido = new Label("Códigos informados inválidos!");	
+		invalido.setVisible(false);
+		
+		HBox buscarRotas_invalido = new HBox(buscarRotas, invalido);	
+		
+		/*consultaTresCB.getItems().addAll(gerCias.listarCiasAereas());
+		Button consultaTresBT = new Button("Exibir");
+		consultaUmBT.setOnAction(e -> {
+			gerenciador.clear();
+			consultaUm(consultaUmCB);
+			gerenciador.getMapKit().repaint();
+		});
+		*/
+		leftPane.add(consultaTresLB, 0, 5);
+		leftPane.add(origemHB, 0, 6);
+		leftPane.add(destinoHB, 0, 7);
+		leftPane.add(buscarRotas_invalido, 0, 8);
+		
+		// ==========================================================
+
+		leftPane.add(new Separator(), 0, 9);
+		
 		// Funcao teste que exibe todos os Aeroportos================
 		Label exibeTodosLB = new Label("Mostrar  todos Aeroportos");
 		Button exibeTodosBT = new Button("Exibir");
 		exibeTodosBT.setOnAction(e -> {
 			exibeTodos();
 		});
-		leftPane.add(exibeTodosLB, 0, 4);
-		leftPane.add(exibeTodosBT, 0, 5);
+		leftPane.add(exibeTodosLB, 0, 10);
+		leftPane.add(exibeTodosBT, 0, 11);
 		// ==========================================================
 
 		// Montando a tela do JavaFX=================================
