@@ -71,6 +71,7 @@ public class JanelaFX extends Application {
 		leftPane.setHgap(10);
 		leftPane.setVgap(10);
 		leftPane.setPadding(new Insets(10, 10, 10, 10));
+		leftPane.setGridLinesVisible(true);
 		// ==========================================================
 
 		// Teste do Professor========================================
@@ -95,7 +96,21 @@ public class JanelaFX extends Application {
 		leftPane.add(consultaUmCB, 0, 2);
 		leftPane.add(consultaUmBT, 0, 3);
 		// ==========================================================
-
+      
+		
+		//Botoes da consulta 2=======================================
+		Label consultaDois = new Label("Cons.2 : Loucura loucura");
+		ComboBox consultaDoisCB = new ComboBox();
+		consultaDoisCB.getItems().add("Todos os países");
+		consultaDoisCB.getItems().addAll(gerPaises.listarPaises());
+		leftPane.add(consultaDoisCB, 0, 9);
+		
+		
+		
+		//===========================================================
+		
+		
+		
 		// Funcao teste que exibe todos os Aeroportos================
 		Label exibeTodosLB = new Label("Mostrar  todos Aeroportos");
 		Button exibeTodosBT = new Button("Exibir");
@@ -230,6 +245,7 @@ public class JanelaFX extends Application {
 		List<MyWaypoint> pontos = new ArrayList<>();
 		List<Aeroporto> aeroportos = gerAero.listarAeroportos();
 		int cont = 0;
+
 		for (Aeroporto a : aeroportos) {
 			cont = 0;
 			pontos.add(new MyWaypoint(Color.RED, a.getNome(), a.getLocal(), 4));
