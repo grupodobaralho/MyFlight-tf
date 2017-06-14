@@ -75,6 +75,8 @@ public class JanelaFX extends Application {
 		leftPane.setHgap(10);
 		leftPane.setVgap(10);
 		leftPane.setPadding(new Insets(10, 10, 10, 10));
+		leftPane.setGridLinesVisible(true);
+		
 		// ==========================================================
 
 		// Teste do Professor========================================
@@ -308,6 +310,21 @@ public class JanelaFX extends Application {
 		gerenciador.setPontos(aeroportos);
 	}
 
+	/**
+	 * Desenha todos os aeroportos onde uma determinada companhia aérea opera.
+	 * Mostra também as rotas envolvidas
+	 * 
+	 * @param consultaUmCB
+	 */
+	private void consultaTres(TextField origemTF, TextField destinoTF){
+		gerenciador.clear();
+		
+		
+		
+		
+		
+	}
+	
 	private class EventosMouse extends MouseAdapter {
 		private int lastButton = -1;
 
