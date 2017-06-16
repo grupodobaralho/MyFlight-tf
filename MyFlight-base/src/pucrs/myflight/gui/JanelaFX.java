@@ -76,7 +76,7 @@ public class JanelaFX extends Application {
 		leftPane.setHgap(10);
 		leftPane.setVgap(10);
 		leftPane.setPadding(new Insets(10, 10, 10, 10));
-		leftPane.setGridLinesVisible(true);
+		leftPane.setGridLinesVisible(false);
 		
 		// ==========================================================
 
@@ -107,17 +107,16 @@ public class JanelaFX extends Application {
 		
 		// Botoes da Consulta 3======================================		
 		
-		
+		/*
 		Grafo grafo = new Grafo(gerRotas.listarTodas(), gerAero.listarAeroportos());
-		Set<ArrayList<Rota>> teste = grafo.encontra(gerAero.getAeroporto("GRU"), gerAero.getAeroporto("VIX"));
+		Set<ArrayList<Rota>> teste = grafo.encontra(gerAero.getAeroporto("GRU"), gerAero.getAeroporto("GIG"));
 		teste.forEach(e ->{
 			System.out.println(e);
 			System.out.println();
 		});
+		*/		
 		
-		
-		
-		/*Label consultaTresLB = new Label("Cons.3 : Mostra todas rotas entre 2 aeroportos");
+		Label consultaTresLB = new Label("Cons.3 : Mostra todas rotas entre 2 aeroportos");
 		
 		Label origemLB = new Label("Origem"); 
 		TextField origemTF = new TextField();
@@ -139,7 +138,7 @@ public class JanelaFX extends Application {
 		
 		HBox buscarRotas_invalido = new HBox(buscarRotas, invalido);	
 		
-		consultaTresCB.getItems().addAll(gerCias.listarCiasAereas());
+		//consultaTresCB.getItems().addAll(gerCias.listarCiasAereas());
 		Button consultaTresBT = new Button("Exibir");
 		consultaUmBT.setOnAction(e -> {
 			gerenciador.clear();
@@ -150,7 +149,7 @@ public class JanelaFX extends Application {
 		leftPane.add(consultaTresLB, 0, 5);
 		leftPane.add(origemHB, 0, 6);
 		leftPane.add(destinoHB, 0, 7);
-		leftPane.add(buscarRotas_invalido, 0, 8);*/
+		leftPane.add(buscarRotas_invalido, 0, 8);
 		
 		// ==========================================================
 
