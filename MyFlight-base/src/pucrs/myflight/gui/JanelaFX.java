@@ -37,6 +37,7 @@ import pucrs.myflight.modelo.GerenciadorAeroportos;
 import pucrs.myflight.modelo.GerenciadorCias;
 import pucrs.myflight.modelo.GerenciadorPaises;
 import pucrs.myflight.modelo.GerenciadorRotas;
+import pucrs.myflight.modelo.Grafo;
 import pucrs.myflight.modelo.Rota;
 
 public class JanelaFX extends Application {
@@ -104,8 +105,19 @@ public class JanelaFX extends Application {
 
 		leftPane.add(new Separator(), 0, 4);
 		
-		// Botoes da Consulta 3======================================
-		Label consultaTresLB = new Label("Cons.3 : Mostra todas rotas entre 2 aeroportos");
+		// Botoes da Consulta 3======================================		
+		
+		
+		Grafo grafo = new Grafo(gerRotas.listarTodas(), gerAero.listarAeroportos());
+		Set<ArrayList<Rota>> teste = grafo.encontra(gerAero.getAeroporto("GRU"), gerAero.getAeroporto("VIX"));
+		teste.forEach(e ->{
+			System.out.println(e);
+			System.out.println();
+		});
+		
+		
+		
+		/*Label consultaTresLB = new Label("Cons.3 : Mostra todas rotas entre 2 aeroportos");
 		
 		Label origemLB = new Label("Origem"); 
 		TextField origemTF = new TextField();
@@ -127,18 +139,18 @@ public class JanelaFX extends Application {
 		
 		HBox buscarRotas_invalido = new HBox(buscarRotas, invalido);	
 		
-		/*consultaTresCB.getItems().addAll(gerCias.listarCiasAereas());
+		consultaTresCB.getItems().addAll(gerCias.listarCiasAereas());
 		Button consultaTresBT = new Button("Exibir");
 		consultaUmBT.setOnAction(e -> {
 			gerenciador.clear();
 			consultaUm(consultaUmCB);
 			gerenciador.getMapKit().repaint();
 		});
-		*/
+		
 		leftPane.add(consultaTresLB, 0, 5);
 		leftPane.add(origemHB, 0, 6);
 		leftPane.add(destinoHB, 0, 7);
-		leftPane.add(buscarRotas_invalido, 0, 8);
+		leftPane.add(buscarRotas_invalido, 0, 8);*/
 		
 		// ==========================================================
 
@@ -174,7 +186,7 @@ public class JanelaFX extends Application {
 		gerAvioes = new GerenciadorAeronaves();
 		gerAero = new GerenciadorAeroportos();
 		gerRotas = new GerenciadorRotas();
-
+		
 		try {
 			gerCias.carregaDados();
 		} catch (IOException e) {
