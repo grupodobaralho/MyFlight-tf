@@ -45,6 +45,14 @@ public class GerenciadorPaises {
 		paises.put(pais.getCodigo(), pais);
 	}
 
+	public ArrayList<Pais> listarPaises() {
+		ArrayList<Pais> retorno = new ArrayList<>();
+		for (HashMap.Entry<String, Pais> entry : paises.entrySet()) {
+			retorno.add(entry.getValue());
+		}
+
+		return retorno;
+	}
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
