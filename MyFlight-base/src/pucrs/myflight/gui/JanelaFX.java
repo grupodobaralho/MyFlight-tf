@@ -34,6 +34,7 @@ import pucrs.myflight.modelo.GerenciadorCias;
 import pucrs.myflight.modelo.GerenciadorPaises;
 import pucrs.myflight.modelo.GerenciadorRotas;
 import pucrs.myflight.modelo.Rota;
+import pucrs.myflight.modelo.Pais;
 
 public class JanelaFX extends Application {
 
@@ -71,7 +72,7 @@ public class JanelaFX extends Application {
 		leftPane.setHgap(10);
 		leftPane.setVgap(10);
 		leftPane.setPadding(new Insets(10, 10, 10, 10));
-		leftPane.setGridLinesVisible(true);
+		// leftPane.setGridLinesVisible(true);
 		// ==========================================================
 
 		// Teste do Professor========================================
@@ -96,21 +97,24 @@ public class JanelaFX extends Application {
 		leftPane.add(consultaUmCB, 0, 2);
 		leftPane.add(consultaUmBT, 0, 3);
 		// ==========================================================
-      
-		
-		//Botoes da consulta 2=======================================
+
+		// Botoes da consulta 2=======================================
 		Label consultaDois = new Label("Cons.2 : Loucura loucura");
 		ComboBox consultaDoisCB = new ComboBox();
 		consultaDoisCB.getItems().add("Todos os países");
 		consultaDoisCB.getItems().addAll(gerPaises.listarPaises());
+		Button consultaDoisBT = new Button("Exibir");
+		consultaDoisBT.setOnAction(e -> {
+			gerenciador.clear();
+			consultaDois(consultaDoisCB);
+			gerenciador.getMapKit().repaint();
+		});
+
 		leftPane.add(consultaDoisCB, 0, 9);
-		
-		
-		
-		//===========================================================
-		
-		
-		
+		leftPane.add(consultaDoisBT, 0, 10);
+
+		// ===========================================================
+
 		// Funcao teste que exibe todos os Aeroportos================
 		Label exibeTodosLB = new Label("Mostrar  todos Aeroportos");
 		Button exibeTodosBT = new Button("Exibir");
@@ -239,17 +243,84 @@ public class JanelaFX extends Application {
 			pontos.add(new MyWaypoint(Color.RED, a.getNome(), a.getLocal(), 4));
 		gerenciador.setPontos(pontos);
 	}
-
-	private void consulta2(ComboBox consultaDoisCb) {
+ //Funcional, porém necessita ser refatorado;
+	private void consultaDois(ComboBox consultaDoisCb) {
 		gerenciador.clear();
 		List<MyWaypoint> pontos = new ArrayList<>();
 		List<Aeroporto> aeroportos = gerAero.listarAeroportos();
+		List<Rota> rotas = gerRotas.listarTodas();
 		int cont = 0;
+		if (consultaDoisCb.getValue().toString().equalsIgnoreCase("Todos os países")) {
+			for (Aeroporto a : aeroportos) {
+				System.out.println(a);
+				cont = 0;
+				for (int i = 0; i < rotas.size(); i++) {
+					if (rotas.get(i).getOrigem().equals(a))
+						cont++;
+					if (rotas.get(i).getDestino().equals(a))
+						cont++;
+					if (rotas.size() - i == 1) {
+						System.out.println(cont);
+						if (cont < 10) {
+							pontos.add(new MyWaypoint(Color.RED, a.getNome(), a.getLocal(), 4));
+						}
 
-		for (Aeroporto a : aeroportos) {
-			cont = 0;
-			pontos.add(new MyWaypoint(Color.RED, a.getNome(), a.getLocal(), 4));
+						else if (cont >= 10 && cont < 50) {
+							pontos.add(new MyWaypoint(Color.GREEN, a.getNome(), a.getLocal(), 6));
+						}
+
+						else if (cont >= 50 && cont < 100) {
+							pontos.add(new MyWaypoint(Color.YELLOW, a.getNome(), a.getLocal(), 8));
+						}
+
+						else
+							pontos.add(new MyWaypoint(Color.MAGENTA, a.getNome(), a.getLocal(), 10));
+
+					}
+
+				}
+			}
+		} else {
+
+			Pais pais = (Pais) consultaDoisCb.getValue();
+
+			System.out.println(pais);
+			System.out.println();
+			for (Aeroporto a : aeroportos) {
+				System.out.println(a.getPais());
+				if (!a.getPais().equals(pais))
+					continue;
+				System.out.println(a);
+				cont = 0;
+				for (int i = 0; i < rotas.size(); i++) {
+					if (rotas.get(i).getOrigem().equals(a) && a.getPais().equals(pais))
+						cont++;
+					if (rotas.get(i).getDestino().equals(a) && a.getPais().equals(pais))
+						cont++;
+					if (rotas.size() - i == 1) {
+						System.out.println(cont);
+						if (cont < 10) {
+							pontos.add(new MyWaypoint(Color.red, a.getNome(), a.getLocal(), 4));
+						}
+
+						else if (cont >= 10 && cont < 50) {
+							pontos.add(new MyWaypoint(Color.GREEN, a.getNome(), a.getLocal(), 6));
+						}
+
+						else if (cont >= 50 && cont < 100) {
+							pontos.add(new MyWaypoint(Color.YELLOW, a.getNome(), a.getLocal(), 8));
+						}
+
+						else
+							pontos.add(new MyWaypoint(Color.magenta, a.getNome(), a.getLocal(), 10));
+
+					}
+
+				}
+			}
+
 		}
+
 		gerenciador.setPontos(pontos);
 	}
 
