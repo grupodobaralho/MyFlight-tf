@@ -21,7 +21,7 @@ public class GerenciadorPaises {
 		Path path1 = Paths.get("countries.dat");
 		try (Scanner sc = new Scanner(Files.newBufferedReader(path1, Charset.forName("utf8")))) {
 			sc.useDelimiter("[;\n]"); // separadores: ; e nova linha
-			String header = sc.nextLine(); // pula cabeÃ§alho
+			String header = sc.nextLine(); // pula cabeçalho
 			String codigo, nome;
 			while (sc.hasNext()) {
 				codigo = sc.next();

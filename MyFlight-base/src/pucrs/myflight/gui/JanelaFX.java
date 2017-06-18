@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,8 +23,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import pucrs.myflight.modelo.Aeroporto;
 import pucrs.myflight.modelo.CiaAerea;
@@ -33,8 +38,9 @@ import pucrs.myflight.modelo.GerenciadorAeroportos;
 import pucrs.myflight.modelo.GerenciadorCias;
 import pucrs.myflight.modelo.GerenciadorPaises;
 import pucrs.myflight.modelo.GerenciadorRotas;
-import pucrs.myflight.modelo.Rota;
+import pucrs.myflight.modelo.Grafo;
 import pucrs.myflight.modelo.Pais;
+import pucrs.myflight.modelo.Rota;
 
 public class JanelaFX extends Application {
 
@@ -45,6 +51,8 @@ public class JanelaFX extends Application {
 	private GerenciadorAeronaves gerAvioes;
 	private GerenciadorAeroportos gerAero;
 	private GerenciadorRotas gerRotas;
+
+	private Grafo grafo;
 
 	private GerenciadorMapa gerenciador;
 
@@ -82,7 +90,9 @@ public class JanelaFX extends Application {
 			consulta();
 		});
 		// ==========================================================
-
+		
+		leftPane.add(new Separator(), 0, 1);
+		
 		// Botoes da Consulta 1======================================
 		Label consultaUmLB = new Label("Cons.1 : Lista Companhias");
 		ComboBox consultaUmCB = new ComboBox();
@@ -93,13 +103,15 @@ public class JanelaFX extends Application {
 			consultaUm(consultaUmCB);
 			gerenciador.getMapKit().repaint();
 		});
-		leftPane.add(consultaUmLB, 0, 1);
-		leftPane.add(consultaUmCB, 0, 2);
-		leftPane.add(consultaUmBT, 0, 3);
+		leftPane.add(consultaUmLB, 0, 2);
+		leftPane.add(consultaUmCB, 0, 3);
+		leftPane.add(consultaUmBT, 0, 4);
 		// ==========================================================
-
+		
+		leftPane.add(new Separator(), 0, 5);
+		
 		// Botoes da consulta 2=======================================
-		Label consultaDois = new Label("Cons.2 : Loucura loucura");
+		Label consultaDoisLB = new Label("Cons.2 : Loucura loucura");
 		ComboBox consultaDoisCB = new ComboBox();
 		consultaDoisCB.getItems().add("Todos os países");
 		consultaDoisCB.getItems().addAll(gerPaises.listarPaises());
@@ -109,22 +121,74 @@ public class JanelaFX extends Application {
 			consultaDois(consultaDoisCB);
 			gerenciador.getMapKit().repaint();
 		});
-
-		leftPane.add(consultaDoisCB, 0, 9);
-		leftPane.add(consultaDoisBT, 0, 10);
-
+		
+		leftPane.add(consultaDoisLB, 0, 6);
+		leftPane.add(consultaDoisCB, 0, 7);
+		leftPane.add(consultaDoisBT, 0, 8);
 		// ===========================================================
 
+		leftPane.add(new Separator(), 0, 9);
+		
+		// Botoes da Consulta 3======================================
+		Label consultaTresLB = new Label("Cons.3 : Mostra todas rotas entre 2 aeroportos");
+
+		Label origemLB = new Label("Origem");
+		TextField origemTF = new TextField();
+		origemTF.setPromptText("Código da origem");
+		HBox origemHB = new HBox(origemLB, origemTF);
+		origemHB.setSpacing(10);
+
+		Label destinoLB = new Label("Destino");
+		TextField destinoTF = new TextField();
+		destinoTF.setPromptText("Código do destino");
+		HBox destinoHB = new HBox(destinoLB, destinoTF);
+		destinoHB.setSpacing(10);
+
+		Button consultaTrestBT = new Button("Buscar");
+
+		Label invalido = new Label("Códigos informados inválidos!");
+		invalido.setVisible(false);
+
+		HBox buscarRotas_invalido = new HBox(consultaTrestBT, invalido);
+
+		consultaTrestBT.setOnAction(e -> {
+			gerenciador.clear();
+			Aeroporto aeroOrigem = gerAero.getAeroporto(origemTF.getText());
+			Aeroporto aeroDestino = gerAero.getAeroporto(destinoTF.getText());
+			if (aeroOrigem == null || aeroDestino == null || aeroOrigem.equals(aeroDestino))
+				invalido.setVisible(true);
+			else {
+				consultaTres(aeroOrigem, aeroDestino);
+				invalido.setVisible(false);
+			}
+			gerenciador.getMapKit().repaint();
+		});
+		leftPane.add(consultaTresLB, 0, 10);
+		leftPane.add(origemHB, 0, 11);
+		leftPane.add(destinoHB, 0, 12);
+		leftPane.add(buscarRotas_invalido, 0, 13);
+		// ==========================================================
+
+		leftPane.add(new Separator(), 0, 14);
+		
 		// Funcao teste que exibe todos os Aeroportos================
 		Label exibeTodosLB = new Label("Mostrar  todos Aeroportos");
 		Button exibeTodosBT = new Button("Exibir");
 		exibeTodosBT.setOnAction(e -> {
 			exibeTodos();
 		});
-		leftPane.add(exibeTodosLB, 0, 4);
-		leftPane.add(exibeTodosBT, 0, 5);
+		leftPane.add(exibeTodosLB, 0, 15);
+		leftPane.add(exibeTodosBT, 0, 16);
 		// ==========================================================
 
+		// Botao Limpar tela=========================================
+		Label clearLB = new Label("Limpar tela");
+		Button clearBT = new Button("Limpar");
+		clearBT.setOnAction(e -> limparTela());
+		leftPane.add(clearLB, 0, 17);
+		leftPane.add(clearBT, 0, 18);
+		// ==========================================================
+		
 		// Montando a tela do JavaFX=================================
 		pane.setCenter(mapkit);
 		pane.setLeft(leftPane);
@@ -189,6 +253,16 @@ public class JanelaFX extends Application {
 			System.out.println("Msg: " + e);
 			System.exit(1);
 		}
+		
+		grafo = new Grafo(gerRotas.listarTodas(), gerAero.listarAeroportos());
+	}
+	
+	/**
+	 * Limpa a tela
+	 */
+	private void limparTela() {
+		gerenciador.clear();
+		gerenciador.getMapKit().repaint();
 	}
 
 	/**
@@ -243,7 +317,8 @@ public class JanelaFX extends Application {
 			pontos.add(new MyWaypoint(Color.RED, a.getNome(), a.getLocal(), 4));
 		gerenciador.setPontos(pontos);
 	}
- //Funcional, porém necessita ser refatorado;
+
+	// Funcional, porém necessita ser refatorado;
 	private void consultaDois(ComboBox consultaDoisCb) {
 		gerenciador.clear();
 		List<MyWaypoint> pontos = new ArrayList<>();
@@ -361,6 +436,57 @@ public class JanelaFX extends Application {
 		gerenciador.setPontos(aeroportos);
 	}
 
+	/**
+	 * Desenha todos os aeroportos onde uma determinada companhia aérea opera.
+	 * Mostra também as rotas envolvidas
+	 * 
+	 * @param consultaUmCB
+	 */
+	private void consultaTres(Aeroporto origemTF, Aeroporto destinoTF) {
+		// SCK - GRU VIX - GRU
+		limparTela();
+		grafo.reseta();
+		// Realiza consulta no grafo
+		Set<ArrayList<Rota>> listaConsulta3 = new HashSet<>(grafo.encontra(origemTF, destinoTF));
+
+		// Lista de Aeroportos referentes (Pontinhos)
+		List<MyWaypoint> aeroportos = new ArrayList<MyWaypoint>();
+		Set<MyWaypoint> setAeros = new HashSet<MyWaypoint>();
+
+		listaConsulta3.forEach(e -> {
+			int i = 0;
+			for (Rota r : e) {
+				setAeros.add(new MyWaypoint(Color.BLACK, r.getOrigem().getNome(), r.getOrigem().getLocal(), 4));
+				setAeros.add(new MyWaypoint(Color.BLACK, r.getDestino().getNome(), r.getDestino().getLocal(), 4));
+				Tracado tr = new Tracado();
+				switch (i) {
+				case 0:
+					tr.setCor(Color.RED);
+					break;
+				case 1:
+					tr.setCor(Color.GREEN);
+					break;
+				case 2:
+					tr.setCor(Color.BLUE);
+					break;
+				default:
+					tr.setCor(Color.BLACK);
+				}
+				tr.addPonto(r.getOrigem().getLocal());
+				tr.addPonto(r.getDestino().getLocal());
+				tr.setWidth(2);
+				gerenciador.addTracado(tr);
+				i++;
+			}
+			gerenciador.getMapKit().repaint();
+		});
+
+		setAeros.forEach(e -> {
+			aeroportos.add(e);
+		});
+		gerenciador.setPontos(aeroportos);		
+	}
+	
 	private class EventosMouse extends MouseAdapter {
 		private int lastButton = -1;
 
