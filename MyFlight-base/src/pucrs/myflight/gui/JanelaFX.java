@@ -24,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -53,6 +54,7 @@ public class JanelaFX extends Application {
 	private GerenciadorRotas gerRotas;
 
 	private Grafo grafo;
+	private Aeroporto aeroSelecionado;
 
 	private GerenciadorMapa gerenciador;
 
@@ -171,31 +173,53 @@ public class JanelaFX extends Application {
 
 		leftPane.add(new Separator(), 0, 14);
 		
-		// Consulta 4 ===============================================
-				
+		// Consulta 4 ===============================================	
+		Label consultaQuatroLB = new Label("Cons.4 : Mostrar todos os aeroportos alcancaveis");	
+		Label consultaQuatroLB2 = new Label("(Selecione o Aeroporto no mapa)");		
 		
-		HashSet<Aeroporto> consulta4 = grafo.pesquisaQuatro(gerAero.getAeroporto("VIX"), 5);
-		System.out.println(consulta4);
+		Label tempoLB = new Label("Tempo maximo de voo (em horas)");		
+		Slider distSli = new Slider(0, 40, 0);
 		
+		Button consultaQuatrotBT = new Button("Buscar");	
+		
+		distSli.setShowTickMarks(true);
+		distSli.setShowTickLabels(true);
+		distSli.setMajorTickUnit(5);		
+		distSli.setBlockIncrement(1);
+		distSli.setMinWidth(50);
+		
+		consultaQuatrotBT.setOnAction(e -> {
+			gerenciador.clear();
+			consultaQuatro(distSli.getValue());
+			gerenciador.getMapKit().repaint();
+		});
+		leftPane.add(consultaQuatroLB, 0, 15);	
+		leftPane.add(consultaQuatroLB2, 0, 16);	
+		leftPane.add(tempoLB, 0, 17);			
+		leftPane.add(distSli, 0, 18);	
+		leftPane.add(consultaQuatrotBT, 0, 19);			
 		// ==========================================================
 		
+		leftPane.add(new Separator(), 0, 20);
 		
 		// Funcao teste que exibe todos os Aeroportos================
-		Label exibeTodosLB = new Label("Mostrar  todos Aeroportos");
+		Label exibeTodosLB = new Label("Mostrar  todos Aeroportos");		
 		Button exibeTodosBT = new Button("Exibir");
 		exibeTodosBT.setOnAction(e -> {
 			exibeTodos();
 		});
-		leftPane.add(exibeTodosLB, 0, 15);
-		leftPane.add(exibeTodosBT, 0, 16);
+		leftPane.add(exibeTodosLB, 0, 21);
+		leftPane.add(exibeTodosBT, 0, 22);
 		// ==========================================================
-
+		
+		leftPane.add(new Separator(), 0, 23);
+		
 		// Botao Limpar tela=========================================
 		Label clearLB = new Label("Limpar tela");
 		Button clearBT = new Button("Limpar");
 		clearBT.setOnAction(e -> limparTela());
-		leftPane.add(clearLB, 0, 17);
-		leftPane.add(clearBT, 0, 18);
+		leftPane.add(clearLB, 0, 24);
+		leftPane.add(clearBT, 0, 25);
 		// ==========================================================
 		
 		// Montando a tela do JavaFX=================================
@@ -496,6 +520,20 @@ public class JanelaFX extends Application {
 		gerenciador.setPontos(aeroportos);		
 	}
 	
+	private void consultaQuatro(double tempo){
+		Set<Aeroporto> teste = grafo.pesquisaQuatro(aeroSelecionado, tempo);		
+		// Lista de Aeroportos referentes (Pontinhos)
+		List<MyWaypoint> aeroportos = new ArrayList<MyWaypoint>();					
+		teste.forEach(e -> {
+			aeroportos.add(new MyWaypoint(Color.MAGENTA, e.getNome(), e.getLocal(), 4));
+		});		
+		gerenciador.setPontos(aeroportos);
+	}
+	
+	private Aeroporto aeroSelecionado(){
+		return aeroSelecionado = gerAero.buscarAeroProximo(gerenciador.getPosicao());
+	}
+	
 	private class EventosMouse extends MouseAdapter {
 		private int lastButton = -1;
 
@@ -508,6 +546,7 @@ public class JanelaFX extends Application {
 			// Botão 3: seleciona localização
 			if (lastButton == MouseEvent.BUTTON3) {
 				gerenciador.setPosicao(loc);
+				aeroSelecionado = aeroSelecionado();
 				gerenciador.getMapKit().repaint();
 			}
 		}

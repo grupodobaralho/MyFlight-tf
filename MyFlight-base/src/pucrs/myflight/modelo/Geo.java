@@ -20,7 +20,7 @@ public class Geo extends GeoPosition {
 
 	// Metodo de classe (static) para calcular
 	// distancias entre dois objetos Geo informados
-	public static double distancia(Geo geo1, Geo geo2) {
+	public static double distancia(GeoPosition geo1, GeoPosition geo2) {
 		double lat1 = Math.toRadians(geo1.getLatitude());
 		double lat2 = Math.toRadians(geo2.getLatitude());
 		double lon1 = Math.toRadians(geo1.getLongitude());

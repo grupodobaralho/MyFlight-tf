@@ -74,22 +74,19 @@ public class Grafo {
 
 	}
 
-	// double alo = Geo.distancia(rota.getOrigem().getLocal(),
-	// rota.getDestino().getLocal());
-	// return Duration.ofSeconds((long)((alo/805+0.5)*3600));
-
-	public HashSet<Aeroporto> pesquisaQuatro(Aeroporto origem, double limite) {
-		int x = aeroportos.indexOf(origem);
+	public HashSet<Aeroporto> pesquisaQuatro(Aeroporto origem, double limite) {		
+		int x = aeroportos.indexOf(origem);	
+		System.out.println(x);
 		setAero = new HashSet<>();
 		setAero.add(origem);
-		pesquisaQuatroAux(x, 0.0, limite);
+		pesquisaQuatroAux(x, 0, limite);
 		return setAero;
 	}
 
 	private void pesquisaQuatroAux(int x, double tempoVoo, double limite) {
-		double tempoVooAux = tempoVoo;
+		double tempoVooAux = tempoVoo;		
 		for (int i = 0; i < matriz.length; i++) {
-			if (matriz[x][i] != null) {
+			if (matriz[x][i] != null && !(setAero.contains(matriz[x][i].getDestino())) ) {				
 				tempoVooAux = tempoVooAux + calculaTempo(matriz[x][i]);
 				if (!(tempoVooAux > limite)) {
 					setAero.add(matriz[x][i].getDestino());
