@@ -39,6 +39,7 @@ import pucrs.myflight.modelo.GerenciadorCias;
 import pucrs.myflight.modelo.GerenciadorPaises;
 import pucrs.myflight.modelo.GerenciadorRotas;
 import pucrs.myflight.modelo.Grafo;
+import pucrs.myflight.modelo.Pais;
 import pucrs.myflight.modelo.Rota;
 
 public class JanelaFX extends Application {
@@ -51,7 +52,7 @@ public class JanelaFX extends Application {
 	private GerenciadorAeroportos gerAero;
 	private GerenciadorRotas gerRotas;
 
-	private Grafo grafo;	
+	private Grafo grafo;
 
 	private GerenciadorMapa gerenciador;
 
@@ -79,8 +80,7 @@ public class JanelaFX extends Application {
 		leftPane.setHgap(10);
 		leftPane.setVgap(10);
 		leftPane.setPadding(new Insets(10, 10, 10, 10));
-		leftPane.setGridLinesVisible(false);
-
+		// leftPane.setGridLinesVisible(true);
 		// ==========================================================
 
 		// Teste do Professor========================================
@@ -90,7 +90,9 @@ public class JanelaFX extends Application {
 			consulta();
 		});
 		// ==========================================================
-
+		
+		leftPane.add(new Separator(), 0, 1);
+		
 		// Botoes da Consulta 1======================================
 		Label consultaUmLB = new Label("Cons.1 : Lista Companhias");
 		ComboBox consultaUmCB = new ComboBox();
@@ -101,13 +103,32 @@ public class JanelaFX extends Application {
 			consultaUm(consultaUmCB);
 			gerenciador.getMapKit().repaint();
 		});
-		leftPane.add(consultaUmLB, 0, 1);
-		leftPane.add(consultaUmCB, 0, 2);
-		leftPane.add(consultaUmBT, 0, 3);
+		leftPane.add(consultaUmLB, 0, 2);
+		leftPane.add(consultaUmCB, 0, 3);
+		leftPane.add(consultaUmBT, 0, 4);
 		// ==========================================================
+		
+		leftPane.add(new Separator(), 0, 5);
+		
+		// Botoes da consulta 2=======================================
+		Label consultaDoisLB = new Label("Cons.2 : Loucura loucura");
+		ComboBox consultaDoisCB = new ComboBox();
+		consultaDoisCB.getItems().add("Todos os países");
+		consultaDoisCB.getItems().addAll(gerPaises.listarPaises());
+		Button consultaDoisBT = new Button("Exibir");
+		consultaDoisBT.setOnAction(e -> {
+			gerenciador.clear();
+			consultaDois(consultaDoisCB);
+			gerenciador.getMapKit().repaint();
+		});
+		
+		leftPane.add(consultaDoisLB, 0, 6);
+		leftPane.add(consultaDoisCB, 0, 7);
+		leftPane.add(consultaDoisBT, 0, 8);
+		// ===========================================================
 
-		leftPane.add(new Separator(), 0, 4);
-
+		leftPane.add(new Separator(), 0, 9);
+		
 		// Botoes da Consulta 3======================================
 		Label consultaTresLB = new Label("Cons.3 : Mostra todas rotas entre 2 aeroportos");
 
@@ -142,30 +163,32 @@ public class JanelaFX extends Application {
 			}
 			gerenciador.getMapKit().repaint();
 		});
-		leftPane.add(consultaTresLB, 0, 5);
-		leftPane.add(origemHB, 0, 6);
-		leftPane.add(destinoHB, 0, 7);
-		leftPane.add(buscarRotas_invalido, 0, 8);
+		leftPane.add(consultaTresLB, 0, 10);
+		leftPane.add(origemHB, 0, 11);
+		leftPane.add(destinoHB, 0, 12);
+		leftPane.add(buscarRotas_invalido, 0, 13);
 		// ==========================================================
 
-		leftPane.add(new Separator(), 0, 9);
-
+		leftPane.add(new Separator(), 0, 14);
+		
 		// Funcao teste que exibe todos os Aeroportos================
 		Label exibeTodosLB = new Label("Mostrar  todos Aeroportos");
 		Button exibeTodosBT = new Button("Exibir");
 		exibeTodosBT.setOnAction(e -> {
 			exibeTodos();
 		});
-		leftPane.add(exibeTodosLB, 0, 10);
-		leftPane.add(exibeTodosBT, 0, 11);
+		leftPane.add(exibeTodosLB, 0, 15);
+		leftPane.add(exibeTodosBT, 0, 16);
 		// ==========================================================
 
+		// Botao Limpar tela=========================================
 		Label clearLB = new Label("Limpar tela");
 		Button clearBT = new Button("Limpar");
 		clearBT.setOnAction(e -> limparTela());
-		leftPane.add(clearLB, 0, 12);
-		leftPane.add(clearBT, 0, 13);
-
+		leftPane.add(clearLB, 0, 17);
+		leftPane.add(clearBT, 0, 18);
+		// ==========================================================
+		
 		// Montando a tela do JavaFX=================================
 		pane.setCenter(mapkit);
 		pane.setLeft(leftPane);
@@ -230,10 +253,13 @@ public class JanelaFX extends Application {
 			System.out.println("Msg: " + e);
 			System.exit(1);
 		}
-
+		
 		grafo = new Grafo(gerRotas.listarTodas(), gerAero.listarAeroportos());
 	}
-
+	
+	/**
+	 * Limpa a tela
+	 */
 	private void limparTela() {
 		gerenciador.clear();
 		gerenciador.getMapKit().repaint();
@@ -289,6 +315,87 @@ public class JanelaFX extends Application {
 		List<Aeroporto> aeroportos = gerAero.listarAeroportos();
 		for (Aeroporto a : aeroportos)
 			pontos.add(new MyWaypoint(Color.RED, a.getNome(), a.getLocal(), 4));
+		gerenciador.setPontos(pontos);
+	}
+
+	// Funcional, porém necessita ser refatorado;
+	private void consultaDois(ComboBox consultaDoisCb) {
+		gerenciador.clear();
+		List<MyWaypoint> pontos = new ArrayList<>();
+		List<Aeroporto> aeroportos = gerAero.listarAeroportos();
+		List<Rota> rotas = gerRotas.listarTodas();
+		int cont = 0;
+		if (consultaDoisCb.getValue().toString().equalsIgnoreCase("Todos os países")) {
+			for (Aeroporto a : aeroportos) {
+				System.out.println(a);
+				cont = 0;
+				for (int i = 0; i < rotas.size(); i++) {
+					if (rotas.get(i).getOrigem().equals(a))
+						cont++;
+					if (rotas.get(i).getDestino().equals(a))
+						cont++;
+					if (rotas.size() - i == 1) {
+						System.out.println(cont);
+						if (cont < 10) {
+							pontos.add(new MyWaypoint(Color.RED, a.getNome(), a.getLocal(), 4));
+						}
+
+						else if (cont >= 10 && cont < 50) {
+							pontos.add(new MyWaypoint(Color.GREEN, a.getNome(), a.getLocal(), 6));
+						}
+
+						else if (cont >= 50 && cont < 100) {
+							pontos.add(new MyWaypoint(Color.YELLOW, a.getNome(), a.getLocal(), 8));
+						}
+
+						else
+							pontos.add(new MyWaypoint(Color.MAGENTA, a.getNome(), a.getLocal(), 10));
+
+					}
+
+				}
+			}
+		} else {
+
+			Pais pais = (Pais) consultaDoisCb.getValue();
+
+			System.out.println(pais);
+			System.out.println();
+			for (Aeroporto a : aeroportos) {
+				System.out.println(a.getPais());
+				if (!a.getPais().equals(pais))
+					continue;
+				System.out.println(a);
+				cont = 0;
+				for (int i = 0; i < rotas.size(); i++) {
+					if (rotas.get(i).getOrigem().equals(a) && a.getPais().equals(pais))
+						cont++;
+					if (rotas.get(i).getDestino().equals(a) && a.getPais().equals(pais))
+						cont++;
+					if (rotas.size() - i == 1) {
+						System.out.println(cont);
+						if (cont < 10) {
+							pontos.add(new MyWaypoint(Color.red, a.getNome(), a.getLocal(), 4));
+						}
+
+						else if (cont >= 10 && cont < 50) {
+							pontos.add(new MyWaypoint(Color.GREEN, a.getNome(), a.getLocal(), 6));
+						}
+
+						else if (cont >= 50 && cont < 100) {
+							pontos.add(new MyWaypoint(Color.YELLOW, a.getNome(), a.getLocal(), 8));
+						}
+
+						else
+							pontos.add(new MyWaypoint(Color.magenta, a.getNome(), a.getLocal(), 10));
+
+					}
+
+				}
+			}
+
+		}
+
 		gerenciador.setPontos(pontos);
 	}
 
@@ -379,7 +486,7 @@ public class JanelaFX extends Application {
 		});
 		gerenciador.setPontos(aeroportos);		
 	}
-
+	
 	private class EventosMouse extends MouseAdapter {
 		private int lastButton = -1;
 

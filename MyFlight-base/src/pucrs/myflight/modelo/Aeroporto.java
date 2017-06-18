@@ -17,6 +17,10 @@ public class Aeroporto implements Comparable<Aeroporto> {
 		return codigo;
 	}
 
+	public Pais getPais() {
+		return pais;
+	}
+
 	public String getNome() {
 		return nome;
 	}
