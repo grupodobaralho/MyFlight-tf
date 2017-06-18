@@ -111,7 +111,7 @@ public class JanelaFX extends Application {
 		leftPane.add(new Separator(), 0, 5);
 		
 		// Botoes da consulta 2=======================================
-		Label consultaDoisLB = new Label("Cons.2 : Loucura loucura");
+		Label consultaDoisLB = new Label("Cons.2 : Estimativa de volume de trafego");
 		ComboBox consultaDoisCB = new ComboBox();
 		consultaDoisCB.getItems().add("Todos os países");
 		consultaDoisCB.getItems().addAll(gerPaises.listarPaises());
@@ -170,6 +170,15 @@ public class JanelaFX extends Application {
 		// ==========================================================
 
 		leftPane.add(new Separator(), 0, 14);
+		
+		// Consulta 4 ===============================================
+				
+		
+		HashSet<Aeroporto> consulta4 = grafo.pesquisaQuatro(gerAero.getAeroporto("VIX"), 5);
+		System.out.println(consulta4);
+		
+		// ==========================================================
+		
 		
 		// Funcao teste que exibe todos os Aeroportos================
 		Label exibeTodosLB = new Label("Mostrar  todos Aeroportos");
