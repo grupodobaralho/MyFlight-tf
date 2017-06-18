@@ -204,7 +204,8 @@ public class GerenciadorMapa {
 	/*
 	 * Limpa os traçados atuais
 	 */
-	public void clear() {
+	public void clear() {		
+		pontosPainter.setWaypoints(new HashSet<MyWaypoint>());		
 		linhas.clear();
 	}
 
