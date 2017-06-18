@@ -6,16 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Grafo {
-
-	/*
-	 * private static final class Node { private Rota rota;
-	 * 
-	 * public Node(Rota rota) { this.rota = rota; } public Rota getRota() {
-	 * return rota; }
-	 * 
-	 * }
-	 */
-
+	
 	private List<Rota> rotas;
 	private List<Aeroporto> aeroportos;
 	private Rota[][] matriz;
@@ -49,8 +40,7 @@ public class Grafo {
 
 	public void encontraAux(int x, Aeroporto y, ArrayList<Rota> uma, HashSet<Aeroporto> visi) {
 
-		if (x == -1 || visi.size()>2)
-			
+		if (x == -1 || visi.size()>3)			
 			return;
 		
 		ArrayList<Rota> umaRota = new ArrayList<>(uma);
@@ -61,7 +51,7 @@ public class Grafo {
 				if (!visitados.contains(matriz[x][i].getDestino())) {
 					visitados.add(matriz[x][i].getDestino());
 					umaRota.add(matriz[x][i]);
-					//IF i = y?
+					//IF i = y? matriz[x][i].getDestino().equals(y)
 					if (matriz[x][i].getDestino().equals(y)) {	
 						ArrayList<Rota> umaRota2 = new ArrayList<>(umaRota);
 						rotasPossiveis.add(umaRota2);
@@ -71,6 +61,7 @@ public class Grafo {
 					}	
 					umaRota.remove(matriz[x][i]);
 					visitados.remove(matriz[x][i].getDestino());
+					
 				}
 			}
 		}

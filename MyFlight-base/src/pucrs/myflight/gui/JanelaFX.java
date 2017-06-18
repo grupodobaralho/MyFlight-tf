@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,6 +51,9 @@ public class JanelaFX extends Application {
 	private GerenciadorAeroportos gerAero;
 	private GerenciadorRotas gerRotas;
 
+	private Grafo grafo;
+	private Set<ArrayList<Rota>> listaConsulta3;
+
 	private GerenciadorMapa gerenciador;
 
 	private EventosMouse mouse;
@@ -77,7 +81,7 @@ public class JanelaFX extends Application {
 		leftPane.setVgap(10);
 		leftPane.setPadding(new Insets(10, 10, 10, 10));
 		leftPane.setGridLinesVisible(false);
-		
+
 		// ==========================================================
 
 		// Teste do Professor========================================
@@ -104,57 +108,59 @@ public class JanelaFX extends Application {
 		// ==========================================================
 
 		leftPane.add(new Separator(), 0, 4);
-		
-		// Botoes da Consulta 3======================================		
-		
+
+		// Botoes da Consulta 3======================================
+
 		/*
-		Grafo grafo = new Grafo(gerRotas.listarTodas(), gerAero.listarAeroportos());
-		Set<ArrayList<Rota>> teste = grafo.encontra(gerAero.getAeroporto("GRU"), gerAero.getAeroporto("GIG"));
-		teste.forEach(e ->{
-			System.out.println(e);
-			System.out.println();
-		});
-		*/		
-		
+		 * Grafo grafo = new Grafo(gerRotas.listarTodas(),
+		 * gerAero.listarAeroportos()); Set<ArrayList<Rota>> teste =
+		 * grafo.encontra(gerAero.getAeroporto("GRU"),
+		 * gerAero.getAeroporto("GIG")); teste.forEach(e ->{
+		 * System.out.println(e); System.out.println(); });
+		 */
+
 		Label consultaTresLB = new Label("Cons.3 : Mostra todas rotas entre 2 aeroportos");
-		
-		Label origemLB = new Label("Origem"); 
+
+		Label origemLB = new Label("Origem");
 		TextField origemTF = new TextField();
 		origemTF.setPromptText("Código da origem");
 		HBox origemHB = new HBox(origemLB, origemTF);
 		origemHB.setSpacing(10);
-		
+
 		Label destinoLB = new Label("Destino");
 		TextField destinoTF = new TextField();
-		destinoTF.setPromptText("Código do destino");	
+		destinoTF.setPromptText("Código do destino");
 		HBox destinoHB = new HBox(destinoLB, destinoTF);
 		destinoHB.setSpacing(10);
-				
-		
-		Button buscarRotas = new Button("Buscar");
-		
-		Label invalido = new Label("Códigos informados inválidos!");	
+
+		Button consultaTrestBT = new Button("Buscar");
+
+		Label invalido = new Label("Códigos informados inválidos!");
 		invalido.setVisible(false);
-		
-		HBox buscarRotas_invalido = new HBox(buscarRotas, invalido);	
-		
-		//consultaTresCB.getItems().addAll(gerCias.listarCiasAereas());
-		Button consultaTresBT = new Button("Exibir");
-		consultaUmBT.setOnAction(e -> {
+
+		HBox buscarRotas_invalido = new HBox(consultaTrestBT, invalido);
+
+		consultaTrestBT.setOnAction(e -> {
 			gerenciador.clear();
-			consultaUm(consultaUmCB);
+			Aeroporto aeroOrigem = gerAero.getAeroporto(origemTF.getText());
+			Aeroporto aeroDestino = gerAero.getAeroporto(destinoTF.getText());
+			if (aeroOrigem == null || aeroDestino == null || aeroOrigem.equals(aeroDestino))
+				invalido.setVisible(true);
+			else {
+				consultaTres(aeroOrigem, aeroDestino);
+				invalido.setVisible(false);
+			}
 			gerenciador.getMapKit().repaint();
 		});
-		
+
 		leftPane.add(consultaTresLB, 0, 5);
 		leftPane.add(origemHB, 0, 6);
 		leftPane.add(destinoHB, 0, 7);
 		leftPane.add(buscarRotas_invalido, 0, 8);
-		
 		// ==========================================================
 
 		leftPane.add(new Separator(), 0, 9);
-		
+
 		// Funcao teste que exibe todos os Aeroportos================
 		Label exibeTodosLB = new Label("Mostrar  todos Aeroportos");
 		Button exibeTodosBT = new Button("Exibir");
@@ -185,7 +191,7 @@ public class JanelaFX extends Application {
 		gerAvioes = new GerenciadorAeronaves();
 		gerAero = new GerenciadorAeroportos();
 		gerRotas = new GerenciadorRotas();
-		
+
 		try {
 			gerCias.carregaDados();
 		} catch (IOException e) {
@@ -229,6 +235,8 @@ public class JanelaFX extends Application {
 			System.out.println("Msg: " + e);
 			System.exit(1);
 		}
+
+		grafo = new Grafo(gerRotas.listarTodas(), gerAero.listarAeroportos());
 	}
 
 	/**
@@ -327,15 +335,46 @@ public class JanelaFX extends Application {
 	 * 
 	 * @param consultaUmCB
 	 */
-	private void consultaTres(TextField origemTF, TextField destinoTF){
+	private void consultaTres(Aeroporto origemTF, Aeroporto destinoTF) {
+		//SCK - GRU     VIX - GRU
 		gerenciador.clear();
-		
-		
-		
-		
-		
+		// Realiza consulta no grafo
+		listaConsulta3 = grafo.encontra(origemTF, destinoTF);
+
+		// Lista de Aeroportos referentes (Pontinhos)
+		List<MyWaypoint> aeroportos = new ArrayList<MyWaypoint>();
+		Set<MyWaypoint> setAeros = new HashSet<MyWaypoint>();
+
+		listaConsulta3.forEach(e -> {
+			int i = 0;
+			for (Rota r : e) {
+				setAeros.add(new MyWaypoint(Color.BLACK, r.getOrigem().getNome(), r.getOrigem().getLocal(), 4));
+				setAeros.add(new MyWaypoint(Color.BLACK, r.getDestino().getNome(), r.getDestino().getLocal(), 4));
+				Tracado tr = new Tracado();
+				switch (i) {
+				case 0:
+					tr.setCor(Color.RED); break;
+				case 1:
+					tr.setCor(Color.GREEN);	break;				
+				case 2:
+					tr.setCor(Color.BLUE); break;
+				default:
+					tr.setCor(Color.BLACK);
+				}
+				tr.addPonto(r.getOrigem().getLocal());
+				tr.addPonto(r.getDestino().getLocal());
+				tr.setWidth(2);
+				gerenciador.addTracado(tr);
+				i++;
+			}
+		});
+
+		setAeros.forEach(e -> {
+			aeroportos.add(e);
+		});
+		gerenciador.setPontos(aeroportos);
 	}
-	
+
 	private class EventosMouse extends MouseAdapter {
 		private int lastButton = -1;
 
