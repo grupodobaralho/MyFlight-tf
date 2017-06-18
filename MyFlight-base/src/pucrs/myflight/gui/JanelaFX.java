@@ -51,8 +51,7 @@ public class JanelaFX extends Application {
 	private GerenciadorAeroportos gerAero;
 	private GerenciadorRotas gerRotas;
 
-	private Grafo grafo;
-	private Set<ArrayList<Rota>> listaConsulta3;
+	private Grafo grafo;	
 
 	private GerenciadorMapa gerenciador;
 
@@ -110,15 +109,6 @@ public class JanelaFX extends Application {
 		leftPane.add(new Separator(), 0, 4);
 
 		// Botoes da Consulta 3======================================
-
-		/*
-		 * Grafo grafo = new Grafo(gerRotas.listarTodas(),
-		 * gerAero.listarAeroportos()); Set<ArrayList<Rota>> teste =
-		 * grafo.encontra(gerAero.getAeroporto("GRU"),
-		 * gerAero.getAeroporto("GIG")); teste.forEach(e ->{
-		 * System.out.println(e); System.out.println(); });
-		 */
-
 		Label consultaTresLB = new Label("Cons.3 : Mostra todas rotas entre 2 aeroportos");
 
 		Label origemLB = new Label("Origem");
@@ -152,7 +142,6 @@ public class JanelaFX extends Application {
 			}
 			gerenciador.getMapKit().repaint();
 		});
-
 		leftPane.add(consultaTresLB, 0, 5);
 		leftPane.add(origemHB, 0, 6);
 		leftPane.add(destinoHB, 0, 7);
@@ -170,6 +159,12 @@ public class JanelaFX extends Application {
 		leftPane.add(exibeTodosLB, 0, 10);
 		leftPane.add(exibeTodosBT, 0, 11);
 		// ==========================================================
+
+		Label clearLB = new Label("Limpar tela");
+		Button clearBT = new Button("Limpar");
+		clearBT.setOnAction(e -> limparTela());
+		leftPane.add(clearLB, 0, 12);
+		leftPane.add(clearBT, 0, 13);
 
 		// Montando a tela do JavaFX=================================
 		pane.setCenter(mapkit);
@@ -237,6 +232,11 @@ public class JanelaFX extends Application {
 		}
 
 		grafo = new Grafo(gerRotas.listarTodas(), gerAero.listarAeroportos());
+	}
+
+	private void limparTela() {
+		gerenciador.clear();
+		gerenciador.getMapKit().repaint();
 	}
 
 	/**
@@ -336,10 +336,11 @@ public class JanelaFX extends Application {
 	 * @param consultaUmCB
 	 */
 	private void consultaTres(Aeroporto origemTF, Aeroporto destinoTF) {
-		//SCK - GRU     VIX - GRU
-		gerenciador.clear();
+		// SCK - GRU VIX - GRU
+		limparTela();
+		grafo.reseta();
 		// Realiza consulta no grafo
-		listaConsulta3 = grafo.encontra(origemTF, destinoTF);
+		Set<ArrayList<Rota>> listaConsulta3 = new HashSet<>(grafo.encontra(origemTF, destinoTF));
 
 		// Lista de Aeroportos referentes (Pontinhos)
 		List<MyWaypoint> aeroportos = new ArrayList<MyWaypoint>();
@@ -353,11 +354,14 @@ public class JanelaFX extends Application {
 				Tracado tr = new Tracado();
 				switch (i) {
 				case 0:
-					tr.setCor(Color.RED); break;
+					tr.setCor(Color.RED);
+					break;
 				case 1:
-					tr.setCor(Color.GREEN);	break;				
+					tr.setCor(Color.GREEN);
+					break;
 				case 2:
-					tr.setCor(Color.BLUE); break;
+					tr.setCor(Color.BLUE);
+					break;
 				default:
 					tr.setCor(Color.BLACK);
 				}
@@ -367,12 +371,13 @@ public class JanelaFX extends Application {
 				gerenciador.addTracado(tr);
 				i++;
 			}
+			gerenciador.getMapKit().repaint();
 		});
 
 		setAeros.forEach(e -> {
 			aeroportos.add(e);
 		});
-		gerenciador.setPontos(aeroportos);
+		gerenciador.setPontos(aeroportos);		
 	}
 
 	private class EventosMouse extends MouseAdapter {

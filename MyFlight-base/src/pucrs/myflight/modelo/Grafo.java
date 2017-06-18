@@ -9,14 +9,14 @@ public class Grafo {
 	
 	private List<Rota> rotas;
 	private List<Aeroporto> aeroportos;
-	private Rota[][] matriz;
+	private Rota[][] matriz;	
 	private Set<ArrayList<Rota>> rotasPossiveis;
 
 	public Grafo(ArrayList<Rota> rotas, ArrayList<Aeroporto> aeroportos) {
 		this.rotas = rotas;
 		this.aeroportos = aeroportos;
 		this.matriz = new Rota[aeroportos.size()][aeroportos.size()];
-		this.rotasPossiveis = new HashSet<>();
+		reseta();
 		preenche();
 	}
 
@@ -27,8 +27,12 @@ public class Grafo {
 			matriz[x][y] = r;
 		}
 	}
+	
+	public void reseta() {
+		this.rotasPossiveis = new HashSet<>();
+	}
 
-	public Set<ArrayList<Rota>> encontra(Aeroporto origem, Aeroporto destino) {
+	public Set<ArrayList<Rota>> encontra(Aeroporto origem, Aeroporto destino) {	
 		int x = aeroportos.indexOf(origem);
 		// int y = aeroportos.indeyOf(destino);
 		ArrayList<Rota> umaRota = new ArrayList<>();
