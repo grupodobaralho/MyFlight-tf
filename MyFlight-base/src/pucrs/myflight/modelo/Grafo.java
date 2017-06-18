@@ -34,17 +34,17 @@ public class Grafo {
 		this.rotasPossiveis = new HashSet<>();
 	}
 
-	public Set<ArrayList<Rota>> encontra(Aeroporto origem, Aeroporto destino) {
+	public Set<ArrayList<Rota>> pesquisaTres(Aeroporto origem, Aeroporto destino) {
 		int x = aeroportos.indexOf(origem);
 		// int y = aeroportos.indeyOf(destino);
 		ArrayList<Rota> umaRota = new ArrayList<>();
 		HashSet<Aeroporto> visitados = new HashSet<>();
 		visitados.add(origem);
-		encontraAux(x, destino, umaRota, visitados);
+		pesquisaTresAux(x, destino, umaRota, visitados);
 		return rotasPossiveis;
 	}
 
-	private void encontraAux(int x, Aeroporto y, ArrayList<Rota> uma, HashSet<Aeroporto> visi) {
+	private void pesquisaTresAux(int x, Aeroporto y, ArrayList<Rota> uma, HashSet<Aeroporto> visi) {
 
 		if (x == -1 || visi.size() > 3)
 			return;
@@ -61,9 +61,9 @@ public class Grafo {
 					if (matriz[x][i].getDestino().equals(y)) {
 						ArrayList<Rota> umaRota2 = new ArrayList<>(umaRota);
 						rotasPossiveis.add(umaRota2);
-						encontraAux(-1, y, umaRota, visitados);
+						pesquisaTresAux(-1, y, umaRota, visitados);
 					} else {
-						encontraAux(i, y, umaRota, visitados);
+						pesquisaTresAux(i, y, umaRota, visitados);
 					}
 					umaRota.remove(matriz[x][i]);
 					visitados.remove(matriz[x][i].getDestino());
@@ -75,8 +75,7 @@ public class Grafo {
 	}
 
 	public HashSet<Aeroporto> pesquisaQuatro(Aeroporto origem, double limite) {		
-		int x = aeroportos.indexOf(origem);	
-		System.out.println(x);
+		int x = aeroportos.indexOf(origem);			
 		setAero = new HashSet<>();
 		setAero.add(origem);
 		pesquisaQuatroAux(x, 0, limite);
