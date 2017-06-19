@@ -87,7 +87,13 @@ public class Grafo {
 		for (int i = 0; i < matriz.length; i++) {
 			if (matriz[x][i] != null && !(setAero.contains(matriz[x][i].getDestino())) ) {				
 				tempoVooAux = tempoVooAux + calculaTempo(matriz[x][i]);
+				//System.out.println(matriz[x][i].getDestino());
 				if (!(tempoVooAux > limite)) {
+					System.err.printf("%s %s %f %f\n",matriz[x][i].getOrigem().getCodigo(),
+							matriz[x][i].getDestino().getCodigo(),
+							Geo.distancia(matriz[x][i].getOrigem().getLocal(), matriz[x][i].getDestino().getLocal()),
+						    calculaTempo(matriz[x][i]));		
+							
 					setAero.add(matriz[x][i].getDestino());
 					pesquisaQuatroAux(i, tempoVooAux, limite);
 				}
@@ -98,7 +104,8 @@ public class Grafo {
 
 	public double calculaTempo(Rota rota) {		
 		double alo = Geo.distancia(rota.getOrigem().getLocal(), rota.getDestino().getLocal());
-		return Duration.ofSeconds((long) ((alo / 805 + 0.5) * 3600)).toHours();
+		//System.out.println(alo);
+		return ((alo / 805 + 0.5) * 3600);
 	}
 
 }
