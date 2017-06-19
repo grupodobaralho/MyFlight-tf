@@ -16,11 +16,13 @@ import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -220,18 +222,36 @@ public class JanelaFX extends Application {
 		HBox buscarRotas_invalido = new HBox(consultaTrestBT, invalido);
 		buscarRotas_invalido.setSpacing(10);
 		
+		
+		
+		//ChoiceBox<ArrayList<Rota>> consulta3CB = new ChoiceBox<>();			
+		
+		
 		consultaTrestBT.setOnAction(e -> {
 			gerenciador.clear();
 			Aeroporto aeroOrigem = gerAero.getAeroporto(origemTF.getText());
 			Aeroporto aeroDestino = gerAero.getAeroporto(destinoTF.getText());
-			if (aeroOrigem == null || aeroDestino == null || aeroOrigem.equals(aeroDestino))
+			if (aeroOrigem == null || aeroDestino == null || aeroOrigem.equals(aeroDestino)){
 				invalido.setVisible(true);
+				//consulta3CB.setVisible(false);
+			}
 			else {
-				consultaTres(aeroOrigem, aeroDestino);
-				invalido.setVisible(false);
+				Set<ArrayList<Rota>> listaConsulta3 = consultaTres(aeroOrigem, aeroDestino);					
+				invalido.setVisible(false);					
+				//consulta3CB.getItems().removeAll();		
+				//consulta3CB.getItems().addAll(listaConsulta3);
+				//consulta3CB.setVisible(false);		
+				
+				//leftPane.add(consulta3CB, 0, 23);
+				//consulta3CB.setVisible(true);				
 			}
 			gerenciador.getMapKit().repaint();
-		});
+		});		
+		
+		//consulta3CB.setOnAction(e -> {
+		//	consultaTres2(consulta3CB);
+		//});
+		
 		leftPane.add(consultaTresLTF, 0, 11);
 		leftPane.add(origemHB, 0, 12);
 		leftPane.add(destinoHB, 0, 13);
@@ -528,7 +548,7 @@ public class JanelaFX extends Application {
 	 * 
 	 * @param consultaUmCB
 	 */
-	private void consultaTres(Aeroporto origemTF, Aeroporto destinoTF) {
+	private Set<ArrayList<Rota>> consultaTres(Aeroporto origemTF, Aeroporto destinoTF) {
 		// SCK - GRU VIX - GRU
 		limparTela();
 		grafo.reseta();
@@ -571,8 +591,44 @@ public class JanelaFX extends Application {
 			aeroportos.add(e);
 		});
 		gerenciador.setPontos(aeroportos);
+		return listaConsulta3;
 	}
 
+	private void consultaTres2(ChoiceBox consulta3CB){	
+		
+		//Pega as Rotas selecionadas no ChoiceBox
+		ArrayList<Rota> lista = (ArrayList<Rota>) consulta3CB.getValue();
+		
+		// Lista de Aeroportos referentes (Pontinhos)
+		List<MyWaypoint> aeroportos = new ArrayList<MyWaypoint>();
+		int i = 0;
+		
+		for(Rota r : lista){			
+			aeroportos.add(new MyWaypoint(Color.GRAY, r.getOrigem().getNome(), r.getOrigem().getLocal(), 8));
+			aeroportos.add(new MyWaypoint(Color.GRAY, r.getDestino().getNome(), r.getDestino().getLocal(), 8));
+			Tracado tr = new Tracado();
+			switch (i) {
+			case 0:
+				tr.setCor(Color.BLACK);
+				break;
+			case 1:
+				tr.setCor(Color.BLACK);
+				break;
+			case 2:
+				tr.setCor(Color.BLACK);
+				break;
+			default:
+				tr.setCor(Color.BLACK);
+			}
+			tr.addPonto(r.getOrigem().getLocal());
+			tr.addPonto(r.getDestino().getLocal());
+			tr.setWidth(6);
+			gerenciador.addTracado(tr);		
+			i++;
+		}
+		gerenciador.getMapKit().repaint();
+		
+	}
 	/**
 	 * Selecionar um aeroporto de origem e mostrar todos os aeroportos que são
 	 * alcançáveis até um determinado tempo de vôo
