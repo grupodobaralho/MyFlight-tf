@@ -76,6 +76,14 @@ public class GerenciadorAeroportos {
 
 		return retorno;
 	}
+	
+	public Aeroporto buscarAeroProximo(GeoPosition pos){
+		
+		Aeroporto aero = listarAeroportos().stream()
+				.filter(a -> Geo.distancia(a.getLocal(), pos)<=15)
+				.findAny().get();		
+		return aero;
+	}
 
 	@Override
 	public String toString() {
