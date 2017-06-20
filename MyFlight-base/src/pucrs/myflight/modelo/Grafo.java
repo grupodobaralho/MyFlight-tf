@@ -78,6 +78,8 @@ public class Grafo {
 		int x = aeroportos.indexOf(origem);			
 		setAero = new HashSet<>();
 		setAero.add(origem);
+		limite = limite;
+		System.out.println(limite);
 		pesquisaQuatroAux(x, 0, limite);
 		return setAero;
 	}
@@ -85,15 +87,15 @@ public class Grafo {
 	private void pesquisaQuatroAux(int x, double tempoVoo, double limite) {
 		double tempoVooAux = tempoVoo;		
 		for (int i = 0; i < matriz.length; i++) {
-			if (matriz[x][i] != null && !(setAero.contains(matriz[x][i].getDestino())) ) {				
-				tempoVooAux = tempoVooAux + calculaTempo(matriz[x][i]);
-				//System.out.println(matriz[x][i].getDestino());
+			if (matriz[x][i] != null && !(setAero.contains(matriz[x][i].getDestino()))) {				
+				tempoVooAux = tempoVooAux + calculaTempo(matriz[x][i]);			
 				if (!(tempoVooAux > limite)) {
-					System.err.printf("%s %s %f %f\n",matriz[x][i].getOrigem().getCodigo(),
+					/*
+					  System.err.printf("%s %s %f %f\n",matriz[x][i].getOrigem().getCodigo(),					
 							matriz[x][i].getDestino().getCodigo(),
 							Geo.distancia(matriz[x][i].getOrigem().getLocal(), matriz[x][i].getDestino().getLocal()),
-						    calculaTempo(matriz[x][i]));		
-							
+						    calculaTempo(matriz[x][i]));	
+						    */							
 					setAero.add(matriz[x][i].getDestino());
 					pesquisaQuatroAux(i, tempoVooAux, limite);
 				}
@@ -104,8 +106,10 @@ public class Grafo {
 
 	public double calculaTempo(Rota rota) {		
 		double alo = Geo.distancia(rota.getOrigem().getLocal(), rota.getDestino().getLocal());
-		//System.out.println(alo);
-		return ((alo / 805 + 0.5) * 3600);
+		//double teste = (alo / 805 + 0.5);
+		//double antigo = Duration.ofSeconds((long) ((alo / 805 + 0.5) * 3600)).toMinutes();		
+		//System.out.println(" TESTE: "+teste+" Antigo: "+antigo);
+		return (alo / 805 + 0.5);
 	}
 
 }
