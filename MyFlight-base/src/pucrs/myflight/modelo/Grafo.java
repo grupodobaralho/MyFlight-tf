@@ -77,7 +77,7 @@ public class Grafo {
 	public HashSet<Aeroporto> pesquisaQuatro(Aeroporto origem, double limite) {		
 		int x = aeroportos.indexOf(origem);			
 		setAero = new HashSet<>();
-		setAero.add(origem);
+		setAero.add(origem);		
 		pesquisaQuatroAux(x, 0, limite);
 		return setAero;
 	}
@@ -85,9 +85,17 @@ public class Grafo {
 	private void pesquisaQuatroAux(int x, double tempoVoo, double limite) {
 		double tempoVooAux = tempoVoo;		
 		for (int i = 0; i < matriz.length; i++) {
-			if (matriz[x][i] != null && !(setAero.contains(matriz[x][i].getDestino())) ) {				
-				tempoVooAux = tempoVooAux + calculaTempo(matriz[x][i]);
+			//!(setAero.contains(matriz[x][i].getDestino()) ESTE BUGA MUITO!
+			if (matriz[x][i] != null) {	
+				System.out.println(matriz[x][i]);
+				tempoVooAux = tempoVooAux + calculaTempo(matriz[x][i]);			
 				if (!(tempoVooAux > limite)) {
+					/*
+					  System.err.printf("%s %s %f %f\n",matriz[x][i].getOrigem().getCodigo(),					
+							matriz[x][i].getDestino().getCodigo(),
+							Geo.distancia(matriz[x][i].getOrigem().getLocal(), matriz[x][i].getDestino().getLocal()),
+						    calculaTempo(matriz[x][i]));	
+						    */							
 					setAero.add(matriz[x][i].getDestino());
 					pesquisaQuatroAux(i, tempoVooAux, limite);
 				}
@@ -97,8 +105,9 @@ public class Grafo {
 	}
 
 	public double calculaTempo(Rota rota) {		
-		double alo = Geo.distancia(rota.getOrigem().getLocal(), rota.getDestino().getLocal());
-		return Duration.ofSeconds((long) ((alo / 805 + 0.5) * 3600)).toHours();
+		double alo = Geo.distancia(rota.getOrigem().getLocal(), rota.getDestino().getLocal());		
+		//double antigo = Duration.ofSeconds((long) ((alo / 805 + 0.5) * 3600)).toMinutes();			
+		return (alo / 805 + 0.5);
 	}
 
 }
